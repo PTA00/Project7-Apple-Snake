@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <Windows.h>
+#include <io.h>
 
 #pragma warning(disable : 4996)
 
@@ -23,7 +24,7 @@ void gotoxy(int x, int y) {
 /**
  * 隐藏控制台光标
  */
-void HideCursor(){
+void HideCursor() {
     CONSOLE_CURSOR_INFO cursor_info = { 1, 0 };
     SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);
 }
@@ -31,7 +32,7 @@ void HideCursor(){
 /**
  * 设置控制台的宽高
  */
-void setcmdHW(int width,int height) {
+void setcmdHW(int width, int height) {
     char chCmd[32];
     sprintf(chCmd, "mode con cols=%d lines=%d", width, height);
     system(chCmd);
@@ -49,4 +50,31 @@ void cls() {
  */
 void pause() {
     system("pause");
+}
+
+/**
+ * 获取指定目录下的所有文件名
+ * 参数：字符串数组，文件后缀名，搜索路径，最大数量
+ * 返回值：1=未找到，0=正常
+ */
+int getFilesName(char* arr[], char* path, char* suffix, int count) {
+    char pathstr[MAX_PATH];
+    sprintf(pathstr, "%s/*.%s", path, suffix);
+
+    struct _finddata_t fa;
+    int fHandle = _findfirst(pathstr, &fa);
+    if (fHandle == -1) {
+        return 1;//异常返回：当前目录下没有文件
+    }
+    int i = 0;
+    do {
+        arr[i] = (char*)malloc(MAX_PATH);
+        if (arr[i]) {
+            strcpy(arr[i], fa.name);
+        }
+        i++;
+        //printf("调试输出：找到文件:%s\n", fa.name);
+    } while ((_findnext(fHandle, &fa) == 0) && (i < count));
+    _findclose(fHandle);
+    return 0;
 }
