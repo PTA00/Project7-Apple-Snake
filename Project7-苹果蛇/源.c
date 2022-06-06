@@ -1,12 +1,12 @@
 #include "lib.h"
 
-/// <summary>
-/// /////
-/// </summary>
-/// <param name=""></param>
-/// <returns></returns>
 
 int main(void) {
+    printcf(15, "%d %d\n", 123, 456);
+    printcf(0, "%d %d\n", 888, 222);
+    printcf(11, "%d %d\n", 123, 456);
+    printcf(11, "1111\n");
+    
     printcf(15, "%d %d\n", 123, 456);
     printcf(0, "%d %d\n", 888, 222);
     printcf(11, "%d %d\n", 123, 456);
