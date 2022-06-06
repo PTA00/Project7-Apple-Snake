@@ -1,6 +1,10 @@
 #include "lib.h"
 
-
+/// <summary>
+/// /////
+/// </summary>
+/// <param name=""></param>
+/// <returns></returns>
 
 int main(void) {
     printcf(15, "%d %d\n", 123, 456);
