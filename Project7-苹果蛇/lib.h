@@ -101,3 +101,23 @@ int getFilesNum(char* path, char* suffix) {
 
     return i;
 }
+
+//简化名称：sas
+#define sas(a, b) StrAndStr(a, b)
+/**
+ * 拼接字符串（加强版）
+ * 参数：字符串a，字符串b（可以为常量）
+ * 返回值：字符串指针，0为异常
+ */
+char* StrAndStr(char* a, char* b) {
+    if (a == 0 || b == 0) {
+        return 0;
+    }
+    if (strlen(a) == 0 || strlen(b) == 0) {
+        return 0;
+    }
+    char* s = (char*)malloc(strlen(a) + strlen(b) + 1);
+    if (s) {
+        return strcat(strcpy(s, a), b);
+    }
+}
