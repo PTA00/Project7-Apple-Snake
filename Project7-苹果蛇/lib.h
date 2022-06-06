@@ -7,7 +7,7 @@
 /**
  * 更改文字颜色
  */
-void color(int c) {
+void Color(int c) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), c);//更改文字颜色
 }
 
@@ -119,5 +119,36 @@ char* StrAndStr(char* a, char* b) {
     char* s = (char*)malloc(strlen(a) + strlen(b) + 1);
     if (s) {
         return strcat(strcpy(s, a), b);
+    }
+}
+
+//简化名称：printcf
+#define printcf(color, _Format, ...) printColorf(color, _Format, __VA_ARGS__)
+/**
+ * printf 炫彩版
+ * 参数：颜色，格式字符串，参数列表
+ * 0   =   亮白色  * 8   =   白色
+ * 1   =   黑色    * 9   =   灰色
+ * 2   =   蓝色    * 10  =   淡蓝色
+ * 3   =   绿色    * 11  =   淡绿色
+ * 4   =   湖蓝色  * 12  =   淡浅绿色
+ * 5   =   红色    * 13  =   淡红色
+ * 6   =   紫色    * 14  =   淡紫色
+ * 7   =   黄色    * 15  =   淡黄色
+ */
+void printColorf(int color, char const* const _Format, ...) {
+    if (color == 0) {
+        va_list args;
+        va_start(args, _Format);
+        vprintf(_Format, args);
+        va_end(args);
+    }
+    else {
+        Color(color - 1);
+        va_list args;
+        va_start(args, _Format);
+        vprintf(_Format, args);
+        va_end(args);
+        Color(15);
     }
 }
