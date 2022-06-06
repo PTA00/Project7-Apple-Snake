@@ -54,8 +54,8 @@ void pause() {
 
 /**
  * 获取指定目录下的所有文件名
- * 参数：字符串数组，文件后缀名，搜索路径，最大数量
- * 返回值：1=未找到，0=正常
+ * 参数：字符串数组，搜索路径，文件后缀名，最大数量
+ * 返回值：-1=未找到，0=正常
  */
 int getFilesName(char* arr[], char* path, char* suffix, int count) {
     char pathstr[MAX_PATH];
@@ -64,7 +64,7 @@ int getFilesName(char* arr[], char* path, char* suffix, int count) {
     struct _finddata_t fa;
     int fHandle = _findfirst(pathstr, &fa);
     if (fHandle == -1) {
-        return 1;//异常返回：当前目录下没有文件
+        return -1;//异常返回：当前目录下没有文件
     }
     int i = 0;
     do {
@@ -77,4 +77,27 @@ int getFilesName(char* arr[], char* path, char* suffix, int count) {
     } while ((_findnext(fHandle, &fa) == 0) && (i < count));
     _findclose(fHandle);
     return 0;
+}
+
+/**
+ * 获取指定目录下，指定类型文件的数量
+ * 参数：搜索路径，文件后缀名
+ * 返回值：指定类型文件的数量
+ */
+int getFilesNum(char* path, char* suffix) {
+    char pathstr[MAX_PATH];
+    sprintf(pathstr, "%s/*.%s", path, suffix);
+
+    struct _finddata_t fa;
+    int fHandle = _findfirst(pathstr, &fa);
+    if (fHandle == -1) {
+        return 0;
+    }
+    int i = 0;
+    do {
+        i++;
+    } while ((_findnext(fHandle, &fa) == 0));
+    _findclose(fHandle);
+
+    return i;
 }
