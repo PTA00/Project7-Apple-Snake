@@ -1,4 +1,5 @@
-#include "lib.h"
+#include "lib.h"//头文件放lib里
+#include "test.h"//每个函数的测试用例放这里
 
 /// <summary>
 /// zhushi
@@ -24,9 +25,7 @@ void GameErrorlnfo(wchar_t info[]) {
 	MessageBox(NULL, text, TEXT("发生错误！"), MB_ICONERROR);
 }
 
-void GameErrorlnfo_TEST() {
-	GameErrorlnfo(L"123123");
-}
+
 
 int main(void) {
 
