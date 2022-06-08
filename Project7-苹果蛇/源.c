@@ -21,6 +21,7 @@ int isExitgame()
 /// </summary>
 void aaaa() {
 	printf("%s", "我要狠狠地透百川");
+	printf("%s", "再透一遍");
 }
 
 int main(void) {
