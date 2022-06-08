@@ -8,6 +8,6 @@ void GameErrorlnfo_TEST() {
 int getFileRowCount(char path[]);
 
 void getFileRowCount_TEST() {
-	int r = getFileRowCount("map/1.txt");
+	int r = getFileRowCount("text/getFileRowCount.txt");
 	printf("文件行数：%d\n", r);
 }
