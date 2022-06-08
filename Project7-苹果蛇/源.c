@@ -27,15 +27,10 @@ void GameErrorlnfo(wchar_t info[]) {
 	wchar_t text[100];
 	wsprintf(text, L"%s", info);
 	MessageBox(NULL, text, TEXT("·¢Éú´íÎó£¡"), MB_ICONERROR);
-
 }
 
 void GameErrorlnfo_TEST() {
-	//void GameErrorlnfo(wchar_t info[]);
-	//wchar_t info[100];
-	//scanf_s("%ls", info, 100);
 	GameErrorlnfo(L"123123");
-
 }
 
 int main(void) {
