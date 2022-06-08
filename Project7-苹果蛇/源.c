@@ -20,7 +20,7 @@ int isExitgame()
 /// 演示提交
 /// </summary>
 void aaaa() {
-
+	printf("%s", "我要狠狠地透百川");
 }
 
 int main(void) {
