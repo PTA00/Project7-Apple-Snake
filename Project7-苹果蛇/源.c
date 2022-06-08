@@ -16,6 +16,12 @@ int isExitgame()
 
 }
 
+/// <summary>
+/// ÑÝÊ¾Ìá½»
+/// </summary>
+void aaaa() {
+
+}
 
 int main(void) {
 	int r = isExitgame();
