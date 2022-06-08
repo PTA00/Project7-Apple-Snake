@@ -152,3 +152,26 @@ void printColorf(int color, char const* const _Format, ...) {
         Color(15);
     }
 }
+
+/// <summary>
+/// 获取文本文件的行数
+/// </summary>
+/// <param name="path">文本文件的路径</param>
+/// <returns>返回行数，如果有错误返回0</returns>
+int getFileRowCount(char path[]) {
+    FILE* fp;
+    int flag = 0, file_row = 0, count = 0;
+    if ((fp = fopen(path, "r")) == NULL) {
+        return 0;
+    }
+    while (!feof(fp)) {
+        flag = fgetc(fp);
+        if (flag == '\n') {
+            count++;
+        }
+    }
+    file_row = count + 1; //加上最后一行
+    //printf("row = %d\n", file_row);
+    fclose(fp);
+    return file_row;
+}
