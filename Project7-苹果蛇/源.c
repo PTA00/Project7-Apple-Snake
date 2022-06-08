@@ -16,12 +16,7 @@ int isExitgame()
 
 }
 
-/// <summary>
-/// ÑÝÊ¾Ìá½»
-/// </summary>
-void aaaa() {
 
-}
 
 void GameErrorlnfo(wchar_t info[]) {
 	wchar_t text[100];
