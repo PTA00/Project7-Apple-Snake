@@ -1,5 +1,5 @@
-#include "lib.h"//Í·ÎÄ¼ş·ÅlibÀï
-#include "test.h"//Ã¿¸öº¯ÊıµÄ²âÊÔÓÃÀı·ÅÕâÀï
+#include "lib.h"//å¤´æ–‡ä»¶æ”¾libé‡Œ
+#include "test.h"//æ¯ä¸ªå‡½æ•°çš„æµ‹è¯•ç”¨ä¾‹æ”¾è¿™é‡Œ
 
 /// <summary>
 /// zhushi
@@ -8,7 +8,7 @@
 int isExitgame()
 {
 	int x;
-	x = MessageBox(NULL, TEXT("ÊÇ·ñÒªÍË³öÓÎÏ·"), TEXT("¶Ô»°¿ò"), MB_YESNO);
+	x = MessageBox(NULL, TEXT("æ˜¯å¦è¦é€€å‡ºæ¸¸æˆ"), TEXT("å¯¹è¯æ¡†"), MB_YESNO);
 	if (x == IDYES)
 	{
 		return 1;
@@ -22,7 +22,7 @@ int isExitgame()
 void GameErrorlnfo(wchar_t info[]) {
 	wchar_t text[100];
 	wsprintf(text, L"%s", info);
-	MessageBox(NULL, text, TEXT("·¢Éú´íÎó£¡"), MB_ICONERROR);
+	MessageBox(NULL, text, TEXT("å‘ç”Ÿé”™è¯¯ï¼"), MB_ICONERROR);
 }
 
 

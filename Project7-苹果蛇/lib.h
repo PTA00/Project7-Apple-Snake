@@ -5,24 +5,24 @@
 #pragma warning(disable : 4996)
 
 /**
- * ¸ü¸ÄÎÄ×ÖÑÕÉ«
+ * æ›´æ”¹æ–‡å­—é¢œè‰²
  */
 void Color(int c) {
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), c);//¸ü¸ÄÎÄ×ÖÑÕÉ«
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), c);//æ›´æ”¹æ–‡å­—é¢œè‰²
 }
 
 /**
- * ¹â±êÒÆ¶¯µ½(x,y)Î»ÖÃ
+ * å…‰æ ‡ç§»åŠ¨åˆ°(x,y)ä½ç½®
  */
 void gotoxy(int x, int y) {
     COORD c;
     c.X = x;
     c.Y = y;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);//Ê¹¹â±êµ½Õâ¸ö£¨x£¬y£©µÄÎ»ÖÃ£¬ĞèÒªµ÷ÓÃ#include<windows.h>
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);//ä½¿å…‰æ ‡åˆ°è¿™ä¸ªï¼ˆxï¼Œyï¼‰çš„ä½ç½®
 }
 
 /**
- * Òş²Ø¿ØÖÆÌ¨¹â±ê
+ * éšè—æ§åˆ¶å°å…‰æ ‡
  */
 void HideCursor() {
     CONSOLE_CURSOR_INFO cursor_info = { 1, 0 };
@@ -30,7 +30,20 @@ void HideCursor() {
 }
 
 /**
- * ÉèÖÃ¿ØÖÆÌ¨µÄ¿í¸ß
+ * ç¦ç”¨æ§åˆ¶å°ç¼–è¾‘å’Œæ’å…¥
+ */
+void DisbleQuickEditMode() {
+    HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
+    DWORD mode;
+    GetConsoleMode(hStdin, &mode);
+    mode &= ~ENABLE_QUICK_EDIT_MODE;//ç§»é™¤å¿«é€Ÿç¼–è¾‘æ¨¡å¼
+    mode &= ~ENABLE_INSERT_MODE;      //ç§»é™¤æ’å…¥æ¨¡å¼
+    SetConsoleMode(hStdin, mode);
+}
+
+
+/**
+ * è®¾ç½®æ§åˆ¶å°çš„å®½é«˜
  */
 void setcmdHW(int width, int height) {
     char chCmd[32];
@@ -39,23 +52,23 @@ void setcmdHW(int width, int height) {
 }
 
 /**
- * Çå¿Õ¿ØÖÆÌ¨
+ * æ¸…ç©ºæ§åˆ¶å°
  */
 void cls() {
     system("cls");
 }
 
 /**
- * ÔİÍ££¬°´ÈÎÒâ¼ü¼ÌĞø
+ * æš‚åœï¼ŒæŒ‰ä»»æ„é”®ç»§ç»­
  */
 void pause() {
     system("pause");
 }
 
 /**
- * »ñÈ¡Ö¸¶¨Ä¿Â¼ÏÂµÄËùÓĞÎÄ¼şÃû
- * ²ÎÊı£º×Ö·û´®Êı×é£¬ËÑË÷Â·¾¶£¬ÎÄ¼şºó×ºÃû£¬×î´óÊıÁ¿
- * ·µ»ØÖµ£º-1=Î´ÕÒµ½£¬0=Õı³£
+ * è·å–æŒ‡å®šç›®å½•ä¸‹çš„æ‰€æœ‰æ–‡ä»¶å
+ * å‚æ•°ï¼šå­—ç¬¦ä¸²æ•°ç»„ï¼Œæœç´¢è·¯å¾„ï¼Œæ–‡ä»¶åç¼€åï¼Œæœ€å¤§æ•°é‡
+ * è¿”å›å€¼ï¼š-1=æœªæ‰¾åˆ°ï¼Œ0=æ­£å¸¸
  */
 int getFilesName(char* arr[], char* path, char* suffix, int count) {
     char pathstr[MAX_PATH];
@@ -64,7 +77,7 @@ int getFilesName(char* arr[], char* path, char* suffix, int count) {
     struct _finddata_t fa;
     int fHandle = _findfirst(pathstr, &fa);
     if (fHandle == -1) {
-        return -1;//Òì³£·µ»Ø£ºµ±Ç°Ä¿Â¼ÏÂÃ»ÓĞÎÄ¼ş
+        return -1;//å¼‚å¸¸è¿”å›ï¼šå½“å‰ç›®å½•ä¸‹æ²¡æœ‰æ–‡ä»¶
     }
     int i = 0;
     do {
@@ -73,16 +86,16 @@ int getFilesName(char* arr[], char* path, char* suffix, int count) {
             strcpy(arr[i], fa.name);
         }
         i++;
-        //printf("µ÷ÊÔÊä³ö£ºÕÒµ½ÎÄ¼ş:%s\n", fa.name);
+        //printf("è°ƒè¯•è¾“å‡ºï¼šæ‰¾åˆ°æ–‡ä»¶:%s\n", fa.name);
     } while ((_findnext(fHandle, &fa) == 0) && (i < count));
     _findclose(fHandle);
     return 0;
 }
 
 /**
- * »ñÈ¡Ö¸¶¨Ä¿Â¼ÏÂ£¬Ö¸¶¨ÀàĞÍÎÄ¼şµÄÊıÁ¿
- * ²ÎÊı£ºËÑË÷Â·¾¶£¬ÎÄ¼şºó×ºÃû
- * ·µ»ØÖµ£ºÖ¸¶¨ÀàĞÍÎÄ¼şµÄÊıÁ¿
+ * è·å–æŒ‡å®šç›®å½•ä¸‹ï¼ŒæŒ‡å®šç±»å‹æ–‡ä»¶çš„æ•°é‡
+ * å‚æ•°ï¼šæœç´¢è·¯å¾„ï¼Œæ–‡ä»¶åç¼€å
+ * è¿”å›å€¼ï¼šæŒ‡å®šç±»å‹æ–‡ä»¶çš„æ•°é‡
  */
 int getFilesNum(char* path, char* suffix) {
     char pathstr[MAX_PATH];
@@ -102,12 +115,12 @@ int getFilesNum(char* path, char* suffix) {
     return i;
 }
 
-//¼ò»¯Ãû³Æ£ºsas
+//ç®€åŒ–åç§°ï¼šsas
 #define sas(a, b) StrAndStr(a, b)
 /**
- * Æ´½Ó×Ö·û´®£¨¼ÓÇ¿°æ£©
- * ²ÎÊı£º×Ö·û´®a£¬×Ö·û´®b£¨¿ÉÒÔÎª³£Á¿£©
- * ·µ»ØÖµ£º×Ö·û´®Ö¸Õë£¬0ÎªÒì³£
+ * æ‹¼æ¥å­—ç¬¦ä¸²ï¼ˆåŠ å¼ºç‰ˆï¼‰
+ * å‚æ•°ï¼šå­—ç¬¦ä¸²aï¼Œå­—ç¬¦ä¸²bï¼ˆå¯ä»¥ä¸ºå¸¸é‡ï¼‰
+ * è¿”å›å€¼ï¼šå­—ç¬¦ä¸²æŒ‡é’ˆï¼Œ0ä¸ºå¼‚å¸¸
  */
 char* StrAndStr(char* a, char* b) {
     if (a == 0 || b == 0) {
@@ -122,42 +135,35 @@ char* StrAndStr(char* a, char* b) {
     }
 }
 
-//¼ò»¯Ãû³Æ£ºprintcf
+//ç®€åŒ–åç§°ï¼šprintcf
 #define printcf(color, _Format, ...) printColorf(color, _Format, __VA_ARGS__)
 /**
- * printf ìÅ²Ê°æ
- * ²ÎÊı£ºÑÕÉ«£¬¸ñÊ½×Ö·û´®£¬²ÎÊıÁĞ±í
- * 0   =   ÁÁ°×É«  * 8   =   °×É«
- * 1   =   ºÚÉ«    * 9   =   »ÒÉ«
- * 2   =   À¶É«    * 10  =   µ­À¶É«
- * 3   =   ÂÌÉ«    * 11  =   µ­ÂÌÉ«
- * 4   =   ºşÀ¶É«  * 12  =   µ­Ç³ÂÌÉ«
- * 5   =   ºìÉ«    * 13  =   µ­ºìÉ«
- * 6   =   ×ÏÉ«    * 14  =   µ­×ÏÉ«
- * 7   =   »ÆÉ«    * 15  =   µ­»ÆÉ«
+ * printf ç‚«å½©ç‰ˆ
+ * å‚æ•°ï¼šé¢œè‰²ï¼Œæ ¼å¼å­—ç¬¦ä¸²ï¼Œå‚æ•°åˆ—è¡¨
+ * 
+ * 0   =   é»‘è‰²    * 8   =   ç°è‰²
+ * 1   =   è“è‰²    * 9  =   æ·¡è“è‰²
+ * 2   =   ç»¿è‰²    * 10  =   æ·¡ç»¿è‰²
+ * 3   =   æ¹–è“è‰²  * 11  =   æ·¡æµ…ç»¿è‰²
+ * 4   =   çº¢è‰²    * 12  =   æ·¡çº¢è‰²
+ * 5   =   ç´«è‰²    * 13  =   æ·¡ç´«è‰²
+ * 6   =   é»„è‰²    * 14  =   æ·¡é»„è‰²
+ * 7   =   ç™½è‰²    * 15   =   äº®ç™½è‰²
  */
-void printColorf(int color, char const* const _Format, ...) {
-    if (color == 0) {
-        va_list args;
-        va_start(args, _Format);
-        vprintf(_Format, args);
-        va_end(args);
-    }
-    else {
-        Color(color - 1);
-        va_list args;
-        va_start(args, _Format);
-        vprintf(_Format, args);
-        va_end(args);
-        Color(15);
-    }
+void printColorf(int color, char const* const _Format, ...) {   
+    Color(color);
+    va_list args;
+    va_start(args, _Format);
+    vprintf(_Format, args);
+    va_end(args);
+    Color(7);
 }
 
 /// <summary>
-/// »ñÈ¡ÎÄ±¾ÎÄ¼şµÄĞĞÊı
+/// è·å–æ–‡æœ¬æ–‡ä»¶çš„è¡Œæ•°
 /// </summary>
-/// <param name="path">ÎÄ±¾ÎÄ¼şµÄÂ·¾¶</param>
-/// <returns>·µ»ØĞĞÊı£¬Èç¹ûÓĞ´íÎó·µ»Ø0</returns>
+/// <param name="path">æ–‡æœ¬æ–‡ä»¶çš„è·¯å¾„</param>
+/// <returns>è¿”å›è¡Œæ•°ï¼Œå¦‚æœæœ‰é”™è¯¯è¿”å›0</returns>
 int getFileRowCount(char path[]) {
     FILE* fp;
     int flag = 0, file_row = 0, count = 0;
@@ -170,8 +176,66 @@ int getFileRowCount(char path[]) {
             count++;
         }
     }
-    file_row = count + 1; //¼ÓÉÏ×îºóÒ»ĞĞ
+    file_row = count + 1; //åŠ ä¸Šæœ€åä¸€è¡Œ
     //printf("row = %d\n", file_row);
     fclose(fp);
     return file_row;
+}
+
+
+/// <summary>
+/// ç»˜åˆ¶å­—ç¬¦ï¼ˆå…ƒç´ ï¼‰
+/// </summary>
+/// <param name="number">ä»£è¡¨å…ƒç´ çš„æ•°å­—</param>
+void DrawChar(int number) {
+    switch (number) {
+
+    case 1:
+        printcf(51, "  ");
+        break;
+    case 3:
+        printcf(60, "â™¥");
+        break;
+    case 4:
+        printcf(48, "â€»");
+        break;
+    case 5:
+        printcf(52, "â˜…");
+        break;
+    case 6:
+        printcf(136, "\u2588\u2588");
+        break;
+    case 7:
+        printcf(48, "â—");
+        break;
+    case 8:
+        printcf(127, "â–¡");
+        break;
+    case 100:
+        printcf(234, "%s", "â– ");
+    default:
+        if (number > 199 || number < 1) {
+            exit(4);
+        }
+        if (number > 100 && number < 200) {
+            printcf(42, "%s", "â– ");
+        }
+        break;
+    }
+}
+
+/// <summary>
+/// æ‰“å¼€æ–‡ä»¶å¯¹è¯æ¡†
+/// </summary>
+/// <param name="path">å®½å­—ç¬¦æ–‡ä»¶è·¯å¾„</param>
+/// <returns>è¿”å›0ä¸ºç”¨æˆ·å…³é—­äº†å¯¹è¯æ¡†æˆ–å–æ¶ˆé€‰æ‹©</returns>
+int FileDialog(wchar_t path[]) {
+    OPENFILENAME ofn;
+    ZeroMemory(&ofn, sizeof(ofn));
+    ofn.lStructSize = sizeof(ofn); // ç»“æ„å¤§å°
+    ofn.lpstrFile = path; // è·¯å¾„
+    ofn.nMaxFile = MAX_PATH; // è·¯å¾„å¤§å°
+    ofn.lpstrFilter = L"Text\0*.TXT\0"; // æ–‡ä»¶ç±»å‹
+    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+    return GetOpenFileName(&ofn);
 }
