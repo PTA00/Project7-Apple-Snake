@@ -37,7 +37,8 @@ void DisbleQuickEditMode() {
     DWORD mode;
     GetConsoleMode(hStdin, &mode);
     mode &= ~ENABLE_QUICK_EDIT_MODE;//移除快速编辑模式
-    mode &= ~ENABLE_INSERT_MODE;      //移除插入模式
+    mode &= ~ENABLE_INSERT_MODE;//移除插入模式
+    mode |= ENABLE_MOUSE_INPUT;//启用鼠标输入
     SetConsoleMode(hStdin, mode);
 }
 
@@ -239,4 +240,24 @@ int FileDialog(wchar_t path[]) {
     ofn.lpstrFilter = L"Text(*.txt)\0*.txt\0\0"; // 文件类型
     ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
     return GetOpenFileName(&ofn);
+}
+
+/// <summary>
+/// 绘制地图，从xy位置开始绘制
+/// </summary>
+/// <param name="map">地图二维数组</param>
+/// <param name="x">x位置</param>
+/// <param name="y">y位置</param>
+void DrawMap(int map[20][33], int x, int y) {
+    for (int i = 0; i < 20; i++) {
+        for (int j = 0; j < 33; j++) {
+            gotoxy(j * 2 + x, i + y);
+            DrawChar(map[i][j]);
+            //printf("%d,", map[i][j]);
+        }
+        if (i == 19) {
+            return;
+        }
+        printf("\n");
+    }
 }

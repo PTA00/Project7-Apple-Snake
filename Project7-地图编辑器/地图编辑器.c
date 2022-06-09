@@ -5,16 +5,18 @@ int main(void) {
 	system("chcp 65001");
 	cls();
 	SetConsoleTitle(L"地图编辑器");
-	setcmdHW((33+2)*2, 20+2+3);
+	setcmdHW((33+2)*2, 20+6);
 	HideCursor();
 	DisbleQuickEditMode();
 
 	wchar_t wszFile[MAX_PATH] = { 0 };
 	char szFile[MAX_PATH] = { 0 };
+	wchar_t title[MAX_PATH + 6] = { 0 };
 
 	if (FileDialog(wszFile)) {
 		WideCharToMultiByte(CP_UTF8, 0, wszFile, -1, szFile, MAX_PATH, NULL, FALSE);
-		printf("%s\n", szFile);
+		wsprintf(title, L"地图编辑器：%s", wszFile);
+		SetConsoleTitle(title);
 	}
 	else {
 		exit(0);
@@ -56,15 +58,33 @@ int main(void) {
 		count++;
 	}
 
-	for (int i = 0; i < 20; i++) {
-		for (int j = 0; j < 33; j++) {
-			gotoxy(j*2, i+2);
-			DrawChar(map[i][j]);
-			//printf("%d,", map[i][j]);
+	HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
+	INPUT_RECORD inRec;
+	DWORD numRead;
+	int select = 1;
+	while (1) {
+		DrawMap(map, 2, 5);
+		Sleep(20);
+		int r = ReadConsoleInput(hInput, &inRec, (DWORD)1, &numRead);
+		if (r == 0) {
+			exit(6);
 		}
-		printf("\n");
-	}
+		r = inRec.EventType;
+		if (r == MOUSE_EVENT) {
+			SHORT x = inRec.Event.MouseEvent.dwMousePosition.X;
+			SHORT y = inRec.Event.MouseEvent.dwMousePosition.Y;
+			gotoxy(0, 0);
+			printf("%3d,%3d  选择：", x/2-1, y-5);
+			DrawChar(select);
 
+			if (inRec.Event.MouseEvent.dwButtonState == 1) {
+
+			}
+			else if (inRec.Event.MouseEvent.dwButtonState == 2) {
+
+			}
+		}
+	}
+	
 	fclose(fp);
-	getchar();
 }
