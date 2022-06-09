@@ -232,10 +232,11 @@ void DrawChar(int number) {
 int FileDialog(wchar_t path[]) {
     OPENFILENAME ofn;
     ZeroMemory(&ofn, sizeof(ofn));
+    ofn.hwndOwner = GetConsoleWindow();
     ofn.lStructSize = sizeof(ofn); // 结构大小
     ofn.lpstrFile = path; // 路径
     ofn.nMaxFile = MAX_PATH; // 路径大小
-    ofn.lpstrFilter = L"Text\0*.TXT\0"; // 文件类型
-    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+    ofn.lpstrFilter = L"Text(*.txt)\0*.txt\0\0"; // 文件类型
+    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
     return GetOpenFileName(&ofn);
 }
