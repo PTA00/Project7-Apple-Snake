@@ -9,6 +9,8 @@ void GameErrorlnfo_TEST() {
 
 int getFileRowCount(char path[]);
 
+int GameStartSelect_TEST();
+
 void getFileRowCount_TEST() {
 	int r = getFileRowCount("text/getFileRowCount.txt");
 	printf("文件行数：%d\n", r);

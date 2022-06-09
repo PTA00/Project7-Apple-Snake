@@ -67,80 +67,73 @@ int main(void) {
 	DWORD numRead;
 	int select = 1;
 	
-	int cc[8] = { 3,4,5,6,7,8,100,101 };
-	int temp = 0;
-	for (int i = 0; i < 20; i++) {
+	int cc[8] = { 3,4,5,6,7,8,100,101 };//最后一个101代表下一个蛇尾的值
+
+	for (int i = 0; i < 20; i++) {//在地图中寻找蛇尾（最大的数）
 		for (int j = 0; j < 33; j++) {
-			if (map[i][j] > temp) {
-				temp = map[i][j];
+			if (map[i][j] >= cc[7]) {//如果找到更新的蛇尾
+				cc[7] = map[i][j] + 1;//那么下一个蛇尾的值就是最大值+1
 			}
 		}
 	}
-	if (temp > 100) {
-		cc[7] = temp + 1;
-	}
 	
-	for (int i = 0; i < 8; i++) {
+	for (int i = 0; i < 8; i++) {//静态的元素选择按钮，一共8个按钮，间隔1个方格（按钮栏）
 		gotoxy(4*i+16, 2);
 		DrawChar(cc[i]);
 	}
 	
-	gotoxy(2, 2);
+	gotoxy(2, 2);//静态的保存按钮（按钮栏）
 	printf("保存");
-	int time = 0;
+	int time = 0;//“保存”按钮的cd变量
+
 	while (1) {
-		DrawMap(map, 2, 5);
-		if (time) {
+		DrawMap(map, 2, 5);//绘制地图
+		if (time) {//每次循环“保存”按钮的cd减一，cd为0时才能再次点击
 			time--;
 		}
 		Sleep(10);
-		int r = ReadConsoleInput(hInput, &inRec, 1, &numRead);
+		int r = ReadConsoleInput(hInput, &inRec, 1, &numRead);//读取控制台输入缓冲区
 		if (r == 0) {
-			exit(6);
+			exit(6);//如果读取错误，直接退出程序
 		}
-		r = inRec.EventType;
-		if (r == MOUSE_EVENT) {
-			SHORT x = inRec.Event.MouseEvent.dwMousePosition.X;
+		if (inRec.EventType == MOUSE_EVENT) {//读取到的是鼠标类输入
+			SHORT x = inRec.Event.MouseEvent.dwMousePosition.X;//原始xy
 			SHORT y = inRec.Event.MouseEvent.dwMousePosition.Y;
-			int x2 = x / 2 - 1;
+			int x2 = x / 2 - 1;//以地图左上角为参考点的x2y2
 			int y2 = y - 5;
-			gotoxy(0, 0);
+
+			gotoxy(0, 0);//实时输出鼠标在地图上的坐标（以地图左上角为参考点）
 			printf("%3d,%3d 选择：", x2, y2);
-			gotoxy(14, 0);
+			gotoxy(14, 0);//实时输出画笔当前的元素
 			DrawChar(select);
-			gotoxy(16, 0);
+			gotoxy(16, 0);//实时输出贪吃蛇身体的下一个值
 			printf("%d", cc[7]);
 
-
-			if (inRec.Event.MouseEvent.dwButtonState == 1) {
-				
-				if (x2 < 0 || x2>32 || y2 < 0 || y2>19) {
-					if (y2 == -3) {
-						if ((x2 == 0 || x2 == 1)&& time==0) {
-							int r;
-							r = MessageBox(NULL, TEXT("是否要保存？"), TEXT("对话框"), MB_YESNO);
-							time = 10;
-							if (r != IDYES) {
+			if (inRec.Event.MouseEvent.dwButtonState == 1) {//左键
+				if (x2 < 0 || x2>32 || y2 < 0 || y2>19) {//如果不在地图范围内
+					if (y2 == -3) {//如果点到-3行（按钮栏）
+						if ((x2 == 0 || x2 == 1)&& time==0) {//点到的是“保存”按钮，并且按钮cd结束
+							int r = MessageBox(NULL, TEXT("是否要保存？"), TEXT("对话框"), MB_YESNO);
+							time = 10;//设置按钮的cd，防止连续点击，外部每次循环会-1
+							if (r != IDYES) {//不保存直接跳出
 								continue;
 							}
-							//SetConsoleTitle(L"正在保存...");
 							FILE* fp1 = NULL;
-							fp1 = _wfopen(wszFile, L"w");
-							//char savestr[33 * 4 + 2] = { 0 };
-							for (int i = 0; i < 20; i++) {
+							fp1 = _wfopen(wszFile, L"w");//只写，使用之前对话框选择的路径再次打开文件
+							for (int i = 0; i < 20; i++) {//将地图写入文件
 								for (int j = 0; j < 33; j++) {
 									fprintf(fp1, "%04d", map[i][j]);
 								}
 								fprintf(fp1, "\n");
 							}
-							fclose(fp1);
-							exit(7);
+							fclose(fp1);//写入完成后关闭文件
+							exit(7);//保存完毕，退出程序
 						}
-						else if (x2>=7 && x2<=21 && x2%2!=0) {
-							select = cc[(x2-7) / 2];
+						else if (x2>=7 && x2<=21 && x2%2!=0) {//或者点到的是各种元素的按钮，按钮只在奇数列
+							select = cc[(x2-7) / 2];//将画笔设置为按钮对应的元素
 						}
 					}
-					continue;
+					continue;//运行到这步说明只是点到了没用的地方，直接跳出
 				}
 				if (map[y2][x2] != 1) {
 					continue;
@@ -191,29 +184,20 @@ int main(void) {
 					map[y2][x2] = select;
 				}
 			}
-			else if (inRec.Event.MouseEvent.dwButtonState == 2) {
-				if (x2 < 0 || x2>32 || y2 < 0 || y2>19) {
+			else if (inRec.Event.MouseEvent.dwButtonState == 2) {//右键
+				if (x2 < 0 || x2>32 || y2 < 0 || y2>19) {//不在地图范围直接跳出
 					continue;
 				}
-				if (map[y2][x2] == 100 && cc[7]!=101) {
+				if (map[y2][x2] == 100 && cc[7]!=101) {//想删除蛇头，但仍有蛇尾存在，直接跳出
 					continue;
 				}
-				else if (map[y2][x2] > 100) {
-					int temp = 0;
-					for (int i = 0; i < 20 && temp==0; i++) {
-						for (int j = 0; j < 33; j++) {
-							if (map[i][j] == cc[7] - 1) {
-								if (i == y2 && j == x2) {
-									map[y2][x2] = 1;
-									cc[7]--;
-								}
-							}
-						}
+				else if (map[y2][x2] > 100) {//想删除蛇尾
+					if (map[y2][x2] == cc[7] - 1) {//对比当前选择是不是蛇尾的数值
+						map[y2][x2] = 1;
+						cc[7]--;
 					}
-				
-				
 				}
-				else {
+				else {//其它元素正常的删除
 					map[y2][x2] = 1;
 				}
 				

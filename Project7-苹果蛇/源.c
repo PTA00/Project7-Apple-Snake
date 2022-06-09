@@ -31,6 +31,10 @@ int main(void) {
 	system("chcp 65001");//固定，项目编译命令要加上/utf-8
 	cls();
 
+	const int ab = GameStartSelect();	//GameStartSelect()函数的返回值
+	//gotoxy(10, 25);						//不重要
+	//printf("当前返回值：%d\n", ab);		//不重要
+
 	getFileRowCount_TEST();
 
 }
