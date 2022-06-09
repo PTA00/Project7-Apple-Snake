@@ -59,7 +59,7 @@ int main(void) {
 	for (int i = 0; i < 20; i++) {
 		for (int j = 0; j < 33; j++) {
 			gotoxy(j*2, i+2);
-			drawchar(map[i][j]);
+			DrawChar(map[i][j]);
 			//printf("%d,", map[i][j]);
 		}
 		printf("\n");
