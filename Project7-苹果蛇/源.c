@@ -31,7 +31,6 @@ int main(void) {
 	system("chcp 65001");//固定，项目编译命令要加上/utf-8
 	cls();
 
-	getFileRowCount_TEST();
-
+	GameStartSelect_TEST();
 }
 

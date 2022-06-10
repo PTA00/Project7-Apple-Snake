@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <Windows.h>
 #include <io.h>
+#include <conio.h>
 
 #pragma warning(disable : 4996)
 
@@ -260,4 +261,92 @@ void DrawMap(int map[20][33], int x, int y) {
         }
         printf("\n");
     }
+}
+
+/// <summary>
+/// 游戏界面
+/// </summary>
+/// <returns>开始游戏 1，关卡选择 2，游戏规则 3，作者介绍 4，退出游戏esc 0，</returns>
+int GameStartSelect() {
+    int will_x = 33;	//地图空间长值
+    int will_y = 20;	//地图空间宽值
+    int i, j;
+    //标题没想好
+    setcmdHW(will_x * 2 + 20, will_y + 10);		//控制台大小
+    for (i = 0; i <= will_x + 1; i++)
+    {
+        for (j = 0; j <= will_y + 1; j++)
+        {
+            gotoxy(i * 2 + 8, j + 2);
+            if (i == 0 || i == will_x + 1) {
+                printf("□");
+            }
+            else if (j == 0 || j == will_y + 1) {
+                printf("□");
+            }
+            if (j != 0 && j != 21 && i == 0) {		//不重要
+                gotoxy(6, j + 2);					//不重要
+                printcf(11, "%d", j);				//不重要
+            }										//不重要
+            //Sleep(1);
+        }
+        if (i != 0 && i != 34) {					//不重要
+            if (i % 2 == 0)								//不重要
+                gotoxy(i * 2 + 8, 0);				//不重要
+            else									//不重要
+                gotoxy(i * 2 + 8, 1);				//不重要
+            printcf(11, "%d", i);					//不重要
+        }											//不重要
+    }
+    gotoxy(12, 4);
+    printcf(12, "ESC 退！退！退！");
+    gotoxy(will_x + 27, will_y - 1);
+    printcf(14, "上下键控制选择");
+    gotoxy(will_x + 27, will_y + 1);
+    printcf(14, "回车确定");
+    char xz;
+    const int co1 = 15, co2 = 8;//选项的两种颜色
+    const int js_x = will_x + 5; //选项的x值
+    int re_do = 1;
+    int re_enter = 0;
+    do {
+        int opTion_co[4] = { co2,co2,co2,co2 };
+        switch (re_do)
+        {
+        case 1: opTion_co[0] = co1; break;
+        case 2: opTion_co[1] = co1; break;
+        case 3: opTion_co[2] = co1; break;
+        case 4: opTion_co[3] = co1; break;
+        }
+        gotoxy(js_x, 14);
+        printcf(opTion_co[0], "开始游戏");
+        gotoxy(js_x, 16);
+        printcf(opTion_co[1], "关卡选择");
+        gotoxy(js_x, 18);
+        printcf(opTion_co[2], "游戏规则");
+        gotoxy(js_x, 20);
+        printcf(opTion_co[3], "作者介绍");
+        gotoxy(js_x - 28, 22);
+        //printf("当前选择值：%d", re_do);				//不重要
+        HideCursor();
+        xz = _getch();
+        switch (xz)
+        {
+        case 72: case 'w': case 'W':
+            if (re_do == 1)
+                re_do = 1;
+            else
+                re_do--;
+            continue;
+        case 80: case 's': case 'S':
+            if (re_do == 4)
+                re_do = 4;
+            else
+                re_do++;
+            continue;
+        case 27:re_do = 0; break;
+        case 13:re_enter = 1; break;
+        }
+    } while (re_do != 0 && re_enter == 0);
+    return re_do;
 }
