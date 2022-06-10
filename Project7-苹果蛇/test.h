@@ -13,3 +13,10 @@ void getFileRowCount_TEST() {
 	int r = getFileRowCount("text/getFileRowCount.txt");
 	printf("文件行数：%d\n", r);
 }
+
+void GameStartSelect_TEST() {
+	int r = GameStartSelect();
+	cls();
+	gotoxy(0, 0);
+	printf("选择：%d\n", r);
+}
