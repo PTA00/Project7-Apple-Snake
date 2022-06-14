@@ -350,3 +350,68 @@ int GameStartSelect() {
     } while (re_do != 0 && re_enter == 0);
     return re_do;
 }
+
+/// <summary>
+/// 文件名数组转换至序号数组，过滤不合法文件名
+/// </summary>
+/// <param name="filenames">文件名数组</param>
+/// <param name="count">文件数组长度（文件数量）</param>
+/// <returns>动态创建的新序号数组（长度可能缩小）</returns>
+int* FileNames2Nums(char* filenames[], int* count) {
+    int* names = (int*)calloc(*count, sizeof(int*));
+    if (names == NULL) {
+        exit(8);//申请内存失败退出
+    }
+    int n = 0;
+    for (int i = 0; i < *count; i++) {
+        if (filenames[i] == NULL) {//空串跳过
+            continue;
+        }
+        int r = atoi(filenames[i]);
+        if (r == 0) {//非数字跳过
+            continue;
+        }
+        names[i] = r;
+        n++;
+    }
+    int* names2 = (int*)calloc(n, sizeof(int*));
+    if (names2 == NULL) {
+        exit(8);//申请内存失败退出
+    }
+    int n2 = 0;
+    for (int i = 0; i < *count && n2 < n; i++) {
+        if (names[i] == 0) {//前面筛选不合法的跳过
+            continue;
+        }
+        names2[n2] = names[i];
+        n2++;
+    }
+    free(names);
+    *count = n;
+    return names2;
+}
+
+/// <summary>
+/// 错误信息对话框（可自定义）
+/// </summary>
+/// <param name="info">自定义的错误信息（宽字符）</param>
+void GameErrorlnfo(wchar_t info[]) {
+    wchar_t text[100];
+    wsprintf(text, L"%s", info);
+    MessageBox(NULL, text, TEXT("发生错误！"), MB_ICONERROR);
+}
+
+/// <summary>
+/// 是否退出对话框
+/// </summary>
+/// <returns>选是返回1，选否返回0</returns>
+int isExitgame() {
+    int x;
+    x = MessageBox(NULL, TEXT("是否要退出游戏"), TEXT("对话框"), MB_YESNO);
+    if (x == IDYES) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
