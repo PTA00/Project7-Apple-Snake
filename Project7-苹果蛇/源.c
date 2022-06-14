@@ -34,3 +34,11 @@ int main(void) {
 	GameStartSelect_TEST();
 }
 
+
+
+void CopyMap(int map2[20][33], int map[20][33])
+{
+
+	memcpy(map2, map, sizeof(map));
+
+}
