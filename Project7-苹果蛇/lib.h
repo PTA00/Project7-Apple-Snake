@@ -415,3 +415,186 @@ int isExitgame() {
         return 0;
     }
 }
+
+/// <summary>
+/// 游戏关卡
+/// </summary>
+/// <param name="havelevel">关卡数组</param>
+/// <param name="maxlevel">关卡最大数</param>
+/// <returns>返回关卡数，esc 返回0 回到主页面</returns>
+int LevelSelect(int havelevel[], int maxlevel)
+{
+    int will_x = 33;	//地图空间长值
+    int will_y = 20;	//地图空间宽值
+    int i, j;
+    setcmdHW(will_x * 2 + 20, will_y + 10);		//控制台大小
+    for (i = 0; i <= will_x + 1; i++)
+    {
+        for (j = 0; j <= will_y + 1; j++)
+        {
+            gotoxy(i * 2 + 8, j + 2);
+            if (i == 0 || i == will_x + 1) {
+                printf("□");
+            }
+            else if (j == 0 || j == will_y + 1) {
+                printf("□");
+            }
+            if (j != 0 && j != 21 && i == 0) {		//不重要
+                gotoxy(6, j + 2);					//不重要
+                printcf(11, "%d", j);				//不重要
+            }										//不重要
+            //Sleep(1);
+        }
+        if (i != 0 && i != 34) {					//不重要
+            if (i % 2 == 0)								//不重要
+                gotoxy(i * 2 + 8, 0);				//不重要
+            else									//不重要
+                gotoxy(i * 2 + 8, 1);				//不重要
+            printcf(11, "%d", i);					//不重要
+        }											//不重要 
+    }
+    //---分界线---//
+    char le_j = 0;
+    int max_j;
+    int okj = 5;
+    int oki = 2;
+    int gk_y = 12;
+    int gk_y1;
+    int le_ii = 1;  //关卡初始值，不可填0
+    int le_ii_10;
+    int ad_x;
+    int ad_i;
+    int ad_j;
+    int re_enter = 0;
+    do
+    {
+        okj = 5;
+        le_ii_10 = ((le_ii - 1) / 10) * 10;
+        max_j = le_ii_10;
+        gk_y1 = 0;
+        for (i = 0; i < 2; i++)     //刷新关卡界面
+        {
+            for (j = 0; j < 5; j++)
+            {
+                gotoxy(16 + j * 12, gk_y + 1 + gk_y1);
+                printf("        ");
+                gotoxy(16 + j * 12, gk_y + gk_y1);
+                printf("        ");
+                gotoxy(18 + j * 12, gk_y + gk_y1 - 1);
+                printf("  ");
+            }
+            gk_y1 = 5;      //加第二行的y值
+        }
+        gk_y1 = 0;
+        if (maxlevel - max_j > 5) {
+            oki = 2;
+        }
+        else {
+            oki = 1;
+            okj = maxlevel - max_j;
+        }
+        if (le_ii - max_j - 5 > 0) {
+            ad_i = 1;
+            ad_j = le_ii - max_j - 5;
+        }
+        else
+        {
+            ad_i = 0;
+            ad_j = le_ii - max_j;
+        }
+        for (i = 0; i < oki; i++)
+        {
+            for (j = 0; j < okj; j++)
+            {
+                if (i == ad_i && j == ad_j - 1)
+                    ad_x = 1;
+                else
+                    ad_x = 0;
+                gotoxy(18 + j * 12, gk_y + gk_y1 - 1);
+                printcf(8 - ad_x, "○");
+                gotoxy(16 + j * 12, gk_y + 1 + gk_y1 - ad_x);
+                if (max_j + 1 < 10)
+                    printcf(8 - ad_x, "第0%d关", havelevel[max_j]);
+                else
+                    printcf(8 - ad_x, "第%d关", havelevel[max_j]);
+                max_j++;
+            }
+            gk_y1 = 5;      //加第二行的y值
+            if (maxlevel - le_ii_10 < 10) {
+                if (oki == 2)
+                    okj = maxlevel - le_ii_10 - 5;
+            }
+        }
+        gotoxy(12, 4);
+        printcf(12, "ESC 回到主页面");
+        gotoxy(64, 4);
+        printcf(14, "ENTER 确定");
+        gotoxy(12, 21);
+        printcf(11, "方向键控制选择");
+        gotoxy(50, 21);
+        printcf(8, "偷偷告诉你 WSAD 键也可以");
+        gotoxy(36, 6);
+        printf("               ");
+        gotoxy(36, 6);
+        if (le_ii_10 + 10 <= 10)
+            printf("第0%d关--第%d关", le_ii_10 + 1, le_ii_10 + 10);
+        else
+            printf("第%d关--第%d关", le_ii_10 + 1, le_ii_10 + 11);
+        gotoxy(30, 8);
+        printcf(14, "Q ←  快  速  切  换  → E");
+        gotoxy(0, 23);
+        HideCursor();
+        le_j = _getch();
+        switch (le_j)
+        {
+        case 'a':case 'A':case 75:
+            if (le_ii == 1)
+                le_ii = 1;
+            else
+                le_ii--;
+            continue;
+        case 'd':case 'D':case 77:
+            if (le_ii == maxlevel)
+                le_ii = maxlevel;
+            else {
+                le_ii++;
+            }
+            continue;
+        case'q':case'Q':
+            if (le_ii <= 10)
+                le_ii = 1;
+            else {
+                le_ii = le_ii_10 + 1;
+                le_ii -= 10;
+            }
+            continue;
+        case'e':case'E':
+            if (maxlevel - le_ii_10 <= 10)
+                le_ii = le_ii;
+            else {
+                le_ii = le_ii_10 + 1;
+                le_ii += 10;
+            }
+            continue;
+        case'w':case'W':case 72:
+            if (le_ii - le_ii_10 <= 5)
+                le_ii = le_ii;
+            else
+                le_ii -= 5;
+            continue;
+        case's':case'S':case 80:
+            if (le_ii - le_ii_10 > 5 || maxlevel - le_ii_10 <= 5)
+                continue;
+            else {
+                if (le_ii + 5 > maxlevel)
+                    le_ii = maxlevel;
+                else
+                    le_ii += 5;
+            }
+            continue;
+        case 27:le_ii = 0; break;   //esc
+        case 13:re_enter = 1; break;//enter
+        }
+    } while (le_ii != 0 && re_enter == 0);
+    return le_ii;
+}
