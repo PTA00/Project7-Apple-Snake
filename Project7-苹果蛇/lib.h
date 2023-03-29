@@ -266,7 +266,7 @@ void DrawMap(int map[20][33], int x, int y) {
 /// <summary>
 /// 游戏界面
 /// </summary>
-/// <returns>开始游戏 1，关卡选择 2，游戏规则 3，作者介绍 4，退出游戏esc 0，</returns>
+/// <returns>开始游戏 1，关卡选择 2，游戏规则 3，作者介绍 4，退出游戏，esc 0，</returns>
 int GameStartSelect() {
     int will_x = 33;	//地图空间长值
     int will_y = 20;	//地图空间宽值
@@ -413,5 +413,42 @@ int isExitgame() {
     }
     else {
         return 0;
+    }
+}
+
+/// <summary>
+/// 绘制debug边框（显示边界、行号列号）
+/// </summary>
+void drawDebugBox() {
+    int will_x = 33;	//地图空间长值
+    int will_y = 20;	//地图空间宽值
+    int i, j;
+    setcmdHW(will_x * 2 + 20, will_y + 10);		//控制台大小
+
+    for (i = 0; i <= will_x + 1; i++)
+    {
+        for (j = 0; j <= will_y + 1; j++)
+        {
+            gotoxy(i * 2 + 8, j + 2);
+            if (i == 0 || i == will_x + 1) {
+                printf("□");
+            }
+            else if (j == 0 || j == will_y + 1) {
+                printf("□");
+            }
+            if (j != 0 && j != 21 && i == 0) {
+                gotoxy(6, j + 2);
+                printcf(11, "%d", j);
+            }
+        }
+        if (i != 0 && i != 34) {
+            if (i % 2 == 0) {
+                gotoxy(i * 2 + 8, 0);
+            }
+            else {
+                gotoxy(i * 2 + 8, 1);
+            }
+            printcf(11, "%d", i);
+        }
     }
 }
