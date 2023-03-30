@@ -1,9 +1,17 @@
+//禁用不安全警告
+#pragma warning(disable : 4996)
+
 #include <stdio.h>
 #include <Windows.h>
 #include <io.h>
 #include <conio.h>
 
-#pragma warning(disable : 4996)
+//使用方法：dd(函数A()); 意为仅在调试模式下运行该函数
+#if debug==1
+#define dd(a) (a)
+#else
+#define dd(a) /##/
+#endif
 
 /**
  * 更改文字颜色
@@ -273,9 +281,7 @@ int GameStartSelect() {
     int will_y = 20;	//地图空间宽值
     int i, j;
 
-#ifdef debug
-    setcmdHW(will_x * 2 + 20, will_y + 10);		//控制台大小
-#endif // 调试
+    dd(setcmdHW(will_x * 2 + 20, will_y + 10));		//控制台大小
 
     for (i = 0; i <= will_x + 1; i++)
     {
@@ -332,9 +338,7 @@ int GameStartSelect() {
         printcf(opTion_co[3], "作者介绍");
         gotoxy(js_x - 28, 22);
 
-#ifdef debug
-        HideCursor(0);
-#endif // debug
+        dd(HideCursor(0));
 
         xz = _getch();
         switch (xz)
@@ -431,9 +435,7 @@ void drawDebugBox() {
     int will_y = 20;	//地图空间宽值
     int i, j;
 
-#ifdef debug
-    setcmdHW(will_x * 2 + 20, will_y + 10);		//控制台大小
-#endif // 调试
+    dd(setcmdHW(will_x * 2 + 20, will_y + 10));		//控制台大小
 
     for (i = 0; i <= will_x + 1; i++)
     {
