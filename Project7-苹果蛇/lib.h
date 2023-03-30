@@ -23,10 +23,11 @@ void gotoxy(int x, int y) {
 }
 
 /**
- * 隐藏控制台光标
+ * 隐藏或显示控制台光标
+ * 参数：1显示，0隐藏
  */
-void HideCursor() {
-    CONSOLE_CURSOR_INFO cursor_info = { 1, 0 };
+void HideCursor(BOOL b) {
+    CONSOLE_CURSOR_INFO cursor_info = { 1, b };
     SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);
 }
 
@@ -271,8 +272,11 @@ int GameStartSelect() {
     int will_x = 33;	//地图空间长值
     int will_y = 20;	//地图空间宽值
     int i, j;
-    //标题没想好
+
+#ifdef debug
     setcmdHW(will_x * 2 + 20, will_y + 10);		//控制台大小
+#endif // 调试
+
     for (i = 0; i <= will_x + 1; i++)
     {
         for (j = 0; j <= will_y + 1; j++)
@@ -327,8 +331,11 @@ int GameStartSelect() {
         gotoxy(js_x, 20);
         printcf(opTion_co[3], "作者介绍");
         gotoxy(js_x - 28, 22);
-        //printf("当前选择值：%d", re_do);				//不重要
-        HideCursor();
+
+#ifdef debug
+        HideCursor(0);
+#endif // debug
+
         xz = _getch();
         switch (xz)
         {
@@ -423,7 +430,10 @@ void drawDebugBox() {
     int will_x = 33;	//地图空间长值
     int will_y = 20;	//地图空间宽值
     int i, j;
+
+#ifdef debug
     setcmdHW(will_x * 2 + 20, will_y + 10);		//控制台大小
+#endif // 调试
 
     for (i = 0; i <= will_x + 1; i++)
     {
