@@ -8,10 +8,37 @@
 
 //使用方法：dd(函数A()); 意为仅在调试模式下运行该函数
 #if debug==1
+//宏：仅调试模式下运行该函数
 #define dd(a) (a)
 #else
 #define dd(a) /##/
 #endif
+
+#define sas(a, b) StrAndStr(a, b)
+char *StrAndStr(char* a, char* b);
+#define printcf(color, _Format, ...) printColorf(color, _Format, __VA_ARGS__)
+void printColorf(int color, const char* _Format, ...);
+
+void Color(int c);
+void gotoxy(int x, int y);
+void gotoNewxy(int x, int y);
+void HideCursor(BOOL b);
+void DisbleQuickEditMode();
+void setcmdHW(int width, int height);
+void cls();
+void pause();
+int getFilesName(char* arr[], char* path, char* suffix, int count);
+int getFilesNum(char* path, char* suffix);
+int getFileRowCount(char path[]);
+void DrawChar(int number);
+int FileDialog(wchar_t path[]);
+void DrawMap(int map[20][33], int x, int y);
+int GameStartSelect();
+int* FileNames2Nums(char* filenames[], int* count);
+void GameErrorlnfo(wchar_t info[]);
+int isExitgame();
+void drawDebugBox();
+
 
 /**
  * 更改文字颜色
@@ -28,6 +55,15 @@ void gotoxy(int x, int y) {
     c.X = x;
     c.Y = y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);//使光标到这个（x，y）的位置
+}
+
+/// <summary>
+/// 新：游戏区域内，光标移动到指定坐标位置
+/// </summary>
+/// <param name="x">坐标（不需要x2）</param>
+/// <param name="y">坐标</param>
+void gotoNewxy(int x, int y) {
+    gotoxy(x * 2 + 10, y + 3);
 }
 
 /**
@@ -279,37 +315,12 @@ void DrawMap(int map[20][33], int x, int y) {
 int GameStartSelect() {
     int will_x = 33;	//地图空间长值
     int will_y = 20;	//地图空间宽值
-    int i, j;
 
     dd(setcmdHW(will_x * 2 + 20, will_y + 10));		//控制台大小
-
-    for (i = 0; i <= will_x + 1; i++)
-    {
-        for (j = 0; j <= will_y + 1; j++)
-        {
-            gotoxy(i * 2 + 8, j + 2);
-            if (i == 0 || i == will_x + 1) {
-                printf("□");
-            }
-            else if (j == 0 || j == will_y + 1) {
-                printf("□");
-            }
-            if (j != 0 && j != 21 && i == 0) {		//不重要
-                gotoxy(6, j + 2);					//不重要
-                printcf(11, "%d", j);				//不重要
-            }										//不重要
-            //Sleep(1);
-        }
-        if (i != 0 && i != 34) {					//不重要
-            if (i % 2 == 0)								//不重要
-                gotoxy(i * 2 + 8, 0);				//不重要
-            else									//不重要
-                gotoxy(i * 2 + 8, 1);				//不重要
-            printcf(11, "%d", i);					//不重要
-        }											//不重要
-    }
+    dd(drawDebugBox());
+    
     gotoxy(12, 4);
-    printcf(12, "ESC 退！退！退！");
+    printcf(12, "ESC 退出");
     gotoxy(will_x + 27, will_y - 1);
     printcf(14, "上下键控制选择");
     gotoxy(will_x + 27, will_y + 1);
